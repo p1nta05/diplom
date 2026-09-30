@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест и проверка на знанията | Видео обучение по Photoshop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        .option-box {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .option-box:hover {
+            border-color: #17a2b8 !important;
+            background-color: #f8f9fa !important;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="text-white text-center py-4 custom-header" style="background: linear-gradient(135deg, #111 0%, #17a2b8 100%);">
+        <div class="container py-2">
+            <h1 class="h2 fw-bold mb-2">Проверка на теоретичните знания</h1>
+            <p class="mb-0 text-light opacity-75">Интерактивен изпитен тест по курс „Видео обучение по Adobe Photoshop“</p>
+        </div>
+    </header>
+
+    <main class="container my-5 flex-grow-1">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                
+                <div id="progressContainer" class="mb-4">
+                    <div class="d-flex justify-content-between text-muted small fw-semibold mb-1">
+                        <span id="progressText">Въпрос 1 от 20</span>
+                        <span id="progressPercent">5%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div id="progressBar" class="progress-bar bg-info" role="progressbar" style="width: 5%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm p-4 mb-4" id="quizCard">
+                    <div id="questionContainer">
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                        <button type="button" id="prevBtn" class="btn btn-outline-secondary fw-bold px-4" disabled>← Предишен</button>
+                        <button type="button" id="nextBtn" class="btn btn-info fw-bold px-4 text-white">Следващ →</button>
+                    </div>
+                </div>
+
+                <div id="resultContainer" class="card border-0 shadow-sm p-4 mb-4 d-none">
+                    <div class="text-center mb-4">
+                        <h2 class="h3 fw-bold text-dark mb-3">Резултати от изпитния тест</h2>
+                        <div class="display-4 fw-bold text-info mb-2" id="scoreDisplay">0 / 20</div>
+                        <p class="fs-5 mb-1">Успех: <span id="percentageDisplay" class="fw-bold">0%</span></p>
+                        <p class="fs-4 fw-bold mt-3">Оценка по скалата: <span id="gradeDisplay" class="badge bg-success fs-3 px-4 py-2">Отличен (6)</span></p>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h4 class="fw-bold text-dark mb-3">Преглед на отговорите и обяснения:</h4>
+                    <div id="reviewContainer">
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="button" id="restartBtn" class="btn btn-dark fw-bold px-5 py-2">Направи теста отново</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="components.js"></script>
+
+    <script>
+        const quizData = [
+            {
+                question: "1. Кое най-точно описва понятието „пиксел“?",
+                options: [
+                    "Инструмент за селекция на цветни области",
+                    "Формат за запис на векторни обекти",
+                    "Най-малък елемент на цифровото изображение, който съдържа информация за цвят",
+                    "Мерна единица за размера на файла"
+                ],
+                correct: 2,
+                explanation: "Пикселът е най-малката квантова единица на цифровото растерно изображение, носеща информация за цвят и интензитет."
+            },
+            {
+                question: "2. Кой цветови модел е адитивен и се използва за визуализация върху екрани?",
+                options: [
+                    "RGB",
+                    "CMYK",
+                    "Grayscale",
+                    "Bitmap"
+                ],
+                correct: 0,
+                explanation: "RGB (Red, Green, Blue) е адитивен модел, базиран на излъчване на светлина, използван стандартно за екрани и дигитална среда."
+            },
+            {
+                question: "3. Коя клавишна комбинация активира Free Transform в Photoshop за Windows?",
+                options: [
+                    "Ctrl + R",
+                    "Ctrl + K",
+                    "Ctrl + G",
+                    "Ctrl + T"
+                ],
+                correct: 3,
+                explanation: "Клавишната комбинация Ctrl + T извиква рамката за свободни трансформации, мащабиране и завъртане на обекти."
+            },
+            {
+                question: "4. Кой е стандартният клавишен достъп до Brush Tool?",
+                options: [
+                    "P",
+                    "B",
+                    "T",
+                    "X"
+                ],
+                correct: 1,
+                explanation: "Клавишът B избира инструмента за растерно рисуване Brush Tool."
+            },
+            {
+                question: "5. Какво показва характерната „маршируваща“ пунктирна линия около дадена област?",
+                options: [
+                    "Заключен слой",
+                    "Активен работен диск",
+                    "Граница на активната селекция",
+                    "Векторна маска"
+                ],
+                correct: 2,
+                explanation: "Движещата се пунктирна линия (т.нар. marching ants) визуализира границите на активната растерна селекция."
+            },
+            {
+                question: "6. Какво е основното предимство на векторната графика спрямо растерната?",
+                options: [
+                    "Мащабиране без загуба на качество",
+                    "Винаги по-малък размер на файла",
+                    "По-добро представяне на фотографски изображения",
+                    "По-висока PPI стойност"
+                ],
+                correct: 0,
+                explanation: "Векторните обекти се основават на математически криви на Безие, което позволява безкрайно мащабиране без назъбване и загуба на качество."
+            },
+            {
+                question: "7. За какво служи Magic Wand Tool?",
+                options: [
+                    "За рисуване на свободен контур",
+                    "За автоматично премахване на дефекти",
+                    "За изграждане на векторни пътеки",
+                    "За селектиране на области според сходството на цветовете"
+                ],
+                correct: 3,
+                explanation: "Magic Wand Tool избира съседни пиксели автоматично въз основа на зададен праг на цвят и яркост (Tolerance)."
+            },
+            {
+                question: "8. Какво прави параметърът Feather при работа със селекция?",
+                options: [
+                    "Омекотява ръба на селекцията чрез плавен преход към околните пиксели",
+                    "Увеличава физически размера на селекцията с фиксиран брой пиксели",
+                    "Инвертира селекцията",
+                    "Изтрива пикселите извън селекцията"
+                ],
+                correct: 0,
+                explanation: "Feather създава градиентно размиване и плавно заглаждане на ръбовете на селекцията."
+            },
+            {
+                question: "9. Коя клавишна комбинация инвертира текущата селекция?",
+                options: [
+                    "Ctrl + Alt + I",
+                    "Ctrl + I",
+                    "Ctrl + Shift + I",
+                    "Shift + I"
+                ],
+                correct: 2,
+                explanation: "Ctrl + Shift + I (Select Inverse) маркира цялата област извън досегашната селекция."
+            },
+            {
+                question: "10. Каква е разликата между Opacity и Fill в панела Layers?",
+                options: [
+                    "Opacity управлява видимостта на целия слой, включително приложените Layer Styles, докато Fill засяга запълването на слоя",
+                    "Fill управлява прозрачността на целия документ, а Opacity — само на текста",
+                    "Двата параметъра са напълно идентични",
+                    "Opacity работи само с векторни обекти"
+                ],
+                correct: 0,
+                explanation: "Opacity контролира прозрачността на целия обект заедно със стиловете (сенки, контури), докато Fill засяга само пикселите/формата, без да променя ефектите."
+            },
+            {
+                question: "11. Каква е основната логика на Layer Mask?",
+                options: [
+                    "Черното показва съдържанието, а бялото го скрива",
+                    "Бялото показва съдържанието, черното го скрива, а сивото позволява частична видимост",
+                    "Маската работи само с RGB цветове",
+                    "Прилагането на маска изтрива перманентно пикселите"
+                ],
+                correct: 1,
+                explanation: "При слоевите маски бялото изцяло разкрива слоя, черното го маскира (скрива), а сивото създава полупрозрачност."
+            },
+            {
+                question: "12. Какво означават режимите Path, Shape и Pixels при Pen Tool?",
+                options: [
+                    "И трите режима създават само векторни обекти",
+                    "Path създава пътека, Shape създава векторна форма, а Pixels създава растеризиран резултат",
+                    "Path създава растерно изображение, а Pixels — векторна форма",
+                    "Shape и Pixels са напълно идентични режими"
+                ],
+                correct: 1,
+                explanation: "В режим Path се чертае чист контур, в режим Shape се генерира векторен слой със запълване, а в режим Pixels се рисува директно с растерни пиксели."
+            },
+            {
+                question: "13. Каква е основната разлика между Point Type и Paragraph Type?",
+                options: [
+                    "Point Type не използва граница за автоматично пренасяне на текста, а Paragraph Type използва текстова област с определени граници",
+                    "Point Type може да се използва само за заглавия",
+                    "Paragraph Type не позволява промяна на шрифта",
+                    "Двата типа текст са идентични"
+                ],
+                correct: 0,
+                explanation: "Point Type създава свободен текстов ред, докато Paragraph Type оформя блок с фиксирани граници и автоматично пренасяне на думите на нов ред."
+            },
+            {
+                question: "14. Кой параметър в Character panel управлява вертикалното разстояние между редовете текст?",
+                options: [
+                    "Tracking",
+                    "Kerning",
+                    "Leading",
+                    "Baseline"
+                ],
+                correct: 2,
+                explanation: "Интерлиняжът (Leading) определя вертикалното разстояние между основните линии на съседните редове текст."
+            },
+            {
+                question: "15. Каква е основната цел на Adjustment Layers?",
+                options: [
+                    "Да превръщат растерните изображения във векторни",
+                    "Да прилагат цветови и тонални корекции без директно и перманентно променяне на оригиналните пиксели",
+                    "Да заключват автоматично всички слоеве",
+                    "Да намаляват размера на файла"
+                ],
+                correct: 1,
+                explanation: "Коригиращите слоеве (Adjustment Layers) осигуряват неразрушителна (non-destructive) корекция на светлината и цветовете."
+            },
+            {
+                question: "16. Какво е основното предимство на прилагането на филтър върху Smart Object като Smart Filter?",
+                options: [
+                    "Филтърът автоматично превръща изображението във вектор",
+                    "Размерът на документа се намалява значително",
+                    "Филтърът може да бъде редактиран или премахнат по неразрушителен начин",
+                    "Photoshop изтрива оригиналния слой и създава нов файл"
+                ],
+                correct: 2,
+                explanation: "Smart Filters се прилагат недеструктивно върху капсулирани интелигентни обекти, позволявайки промяна на настройките им по всяко време."
+            },
+            {
+                question: "17. Кое твърдение правилно различава Spot Healing Brush, Healing Brush и Clone Stamp Tool?",
+                options: [
+                    "Spot Healing използва автоматично вземане на sample, Healing Brush използва зададен source и смесва резултата, а Clone Stamp копира пиксели от избран source",
+                    "И трите инструмента работят единствено с векторни обекти",
+                    "Clone Stamp променя само цветове и не копира пиксели",
+                    "Healing Brush и Clone Stamp са напълно идентични"
+                ],
+                correct: 0,
+                explanation: "Spot Healing работи автоматично без източник, Healing Brush изисква източник с Alt и смесва текстурата с околната среда, а Clone Stamp копира пикселите 1:1."
+            },
+            {
+                question: "18. Каква е основната разлика между Levels и Curves?",
+                options: [
+                    "Levels работи само с RGB изображения, а Curves — само с CMYK",
+                    "Levels се използва само за векторни обекти",
+                    "Levels позволява корекция на сенки, средни тонове и светли области, докато Curves дава по-прецизен контрол чрез тонална крива и множество точки",
+                    "Двата инструмента изпълняват абсолютно еднаква функция"
+                ],
+                correct: 2,
+                explanation: "Curves осигурява пълен и изключително прецизен контрол върху тоновия диапазон чрез интерактивна крива с неограничен брой контролни точки."
+            },
+            {
+                question: "19. Каква е основната разлика между Path Selection Tool и Direct Selection Tool?",
+                options: [
+                    "Path Selection Tool може да избира и премества цели path компоненти, докато Direct Selection Tool позволява работа с отделни сегменти и опорни точки",
+                    "Path Selection Tool работи само с растерни изображения",
+                    "Direct Selection Tool служи само за изтриване на paths",
+                    "Двата инструмента са напълно еднакви"
+                ],
+                correct: 0,
+                explanation: "Черната стрелка (Path Selection) премества цели форми/пътеки, докато бялата стрелка (Direct Selection) селектира и редактира индивидуални опорни точки и контролни вектори."
+            },
+            {
+                question: "20. Какво прави операцията Exclude Overlapping Shape Areas при комбиниране на векторни форми?",
+                options: [
+                    "Обединява всички области на формите",
+                    "Премахва само долната форма",
+                    "Запазва единствено областта на пресичане",
+                    "Изключва областта, в която формите се припокриват"
+                ],
+                correct: 3,
+                explanation: "Логическата операция Exclude изрязва и скрива зоната на застъпване между припокриващите се векторни форми."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressPercent = document.getElementById('progressPercent');
+        const quizCard = document.getElementById('quizCard');
+        const resultContainer = document.getElementById('resultContainer');
+
+        function renderQuestion() {
+            const q = quizData[currentQuestion];
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+            progressText.innerText = `Въпрос ${currentQuestion + 1} от ${quizData.length}`;
+            progressPercent.innerText = `${Math.round(progress)}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, index) => {
+                const isChecked = userAnswers[currentQuestion] === index;
+                optionsHtml += `
+                    <label class="form-check d-flex align-items-center mb-3 p-3 border rounded-2 option-box ${isChecked ? 'bg-info bg-opacity-10 border-info' : 'bg-white'}" for="opt${index}">
+                        <input class="form-check-input ms-1 me-3 mt-0" type="radio" name="questionOption" id="opt${index}" value="${index}" ${isChecked ? 'checked' : ''}>
+                        <span class="fw-medium text-dark w-100">${opt}</span>
+                    </label>
+                `;
+            });
+
+            questionContainer.innerHTML = `
+                <h3 class="h5 fw-bold text-dark mb-4">${q.question}</h3>
+                <div class="options-list">
+                    ${optionsHtml}
+                </div>
+            `;
+
+            document.querySelectorAll('input[name="questionOption"]').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    userAnswers[currentQuestion] = parseInt(e.target.value);
+                    document.querySelectorAll('.option-box').forEach(box => {
+                        box.classList.remove('bg-info', 'bg-opacity-10', 'border-info');
+                        box.classList.add('bg-white');
+                    });
+                    e.target.closest('.option-box').classList.remove('bg-white');
+                    e.target.closest('.option-box').classList.add('bg-info', 'bg-opacity-10', 'border-info');
+                });
+            });
+
+            prevBtn.disabled = currentQuestion === 0;
+            if (currentQuestion === quizData.length - 1) {
+                nextBtn.innerText = "Предай теста и виж резултат";
+                nextBtn.className = "btn btn-success fw-bold px-4 text-white";
+            } else {
+                nextBtn.innerText = "Следващ →";
+                nextBtn.className = "btn btn-info fw-bold px-4 text-white";
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (userAnswers[currentQuestion] === null) {
+                alert("Моля, изберете отговор преди да продължите!");
+                return;
+            }
+
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        });
+
+        function calculateGrade(percentage) {
+            if (percentage < 50) return { gradeText: "Слаб (2)", badgeClass: "bg-danger" };
+            if (percentage < 70) return { gradeText: "Среден (3)", badgeClass: "bg-warning text-dark" };
+            if (percentage < 80) return { gradeText: "Добър (4)", badgeClass: "bg-info text-dark" };
+            if (percentage < 90) return { gradeText: "Мн. добър (5)", badgeClass: "bg-primary" };
+            return { gradeText: "Отличен (6)", badgeClass: "bg-success" };
+        }
+
+        function showResults() {
+            quizCard.classList.add('d-none');
+            document.getElementById('progressContainer').classList.add('d-none');
+            resultContainer.classList.remove('d-none');
+
+            let score = 0;
+            quizData.forEach((q, index) => {
+                if (userAnswers[index] === q.correct) {
+                    score++;
+                }
+            });
+
+            const percentage = Math.round((score / quizData.length) * 100);
+            const evaluation = calculateGrade(percentage);
+
+            document.getElementById('scoreDisplay').innerText = `${score} / ${quizData.length}`;
+            document.getElementById('percentageDisplay').innerText = `${percentage}%`;
+            
+            const gradeBadge = document.getElementById('gradeDisplay');
+            gradeBadge.innerText = evaluation.gradeText;
+            gradeBadge.className = `badge fs-3 px-4 py-2 ${evaluation.badgeClass}`;
+
+            let reviewHtml = '';
+            quizData.forEach((q, index) => {
+                const userAns = userAnswers[index];
+                const isCorrect = userAns === q.correct;
+                const userAnsText = userAns !== null ? q.options[userAns] : "Няма отговор";
+                const correctAnsText = q.options[q.correct];
+
+                reviewHtml += `
+                    <div class="card border-0 shadow-sm p-3 mb-3 ${isCorrect ? 'border-start border-success border-4' : 'border-start border-danger border-4'}">
+                        <p class="fw-bold text-dark mb-2">${q.question}</p>
+                        <p class="mb-1 small"><strong>Вашият отговор:</strong> <span class="${isCorrect ? 'text-success fw-bold' : 'text-danger fw-bold'}">${userAnsText}</span></p>
+                        ${!isCorrect ? `<p class="mb-1 small"><strong>Верен отговор:</strong> <span class="text-success fw-bold">${correctAnsText}</span></p>` : ''}
+                        <div class="mt-2 p-2 bg-light rounded small text-muted border-start border-info border-2">
+                            <strong>Теоретично обяснение:</strong> ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('reviewContainer').innerHTML = reviewHtml;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            currentQuestion = 0;
+            userAnswers.fill(null);
+            resultContainer.classList.add('d-none');
+            quizCard.classList.remove('d-none');
+            document.getElementById('progressContainer').classList.remove('d-none');
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        renderQuestion();
+    </script>
+</body>
+</html>

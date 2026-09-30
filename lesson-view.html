@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Преглед на урок | Видео обучение по Photoshop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <div id="navbar-placeholder"></div>
+
+    <main class="container my-5 flex-grow-1">
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                
+                <ul class="nav nav-tabs mb-3 fw-semibold" id="lessonTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active text-dark" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-panel" type="button" role="tab">🎥 Видео урок</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-dark" id="pres-tab" data-bs-toggle="tab" data-bs-target="#pres-panel" type="button" role="tab">📊 Презентация</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="lessonTabsContent">
+                    <div class="tab-pane fade show active" id="video-panel" role="tabpanel">
+                        
+                        <div id="videoPartsContainer" class="btn-group btn-group-sm mb-3 d-none"></div>
+
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body p-2">
+                                <div class="ratio ratio-16x9 bg-dark rounded overflow-hidden">
+                                    <video id="lessonVideo" controls poster="poster.jpg">
+                                        <source id="videoSource" src="" type="video/mp4">
+                                        Браузърът ви не поддържа HTML5 видео.
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pres-panel" role="tabpanel">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body p-2">
+                                <div class="ratio ratio-16x9 rounded overflow-hidden bg-secondary">
+                                    <iframe id="presEmbed" src="" width="100%" height="100%" style="border: none;"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-4">
+                    <button id="prevBtn" class="btn btn-outline-secondary fw-bold px-4">← Предишен урок</button>
+                    <button id="nextBtn" class="btn btn-outline-info fw-bold px-4">Следващ урок →</button>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4 mb-4">
+                    <span id="lessonBadge" class="badge bg-info text-dark fw-bold align-self-start mb-2">Тема</span>
+                    <h2 id="lessonTitle" class="h4 fw-bold text-dark mb-3">Заглавие на урока</h2>
+                    <hr>
+                    <h3 class="h6 fw-bold text-secondary text-uppercase mb-3">Какво обхваща урокът:</h3>
+                    <ul id="lessonPoints" class="list-group list-group-flush small"></ul>
+                </div>
+
+                <div class="card border-0 shadow-sm p-4 text-center bg-dark text-white">
+                    <h4 class="h6 fw-bold mb-3">Учебни материали</h4>
+                    <a id="downloadPres" href="#" class="btn btn-info btn-sm fw-bold w-100" target="_blank">📥 Свали презентацията (PDF)</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const lessonsData = {
+            1: {
+                title: "Въведение в растерната графика и Adobe Photoshop",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson1.mp4",
+                presentation: "presentations/lesson1.pdf",
+                points: [
+                    "Теоретични основи на растерната графика — същност на пиксела и разделителната способност.",
+                    "Основни разлики между растерна и векторна графика, техни предимства и недостатъци.",
+                    "Запознаване с дигиталните цветови модели: RGB и CMYK.",
+                    "Практическо конфигуриране на нов работен документ за уеб среди през New Document.",
+                    "Анатомия на стартовия интерфейс на софтуера и разположение на основните работни зони."
+                ]
+            },
+            2: {
+                title: "Графичен интерфейс и основни потребителски настройки",
+                duration: "4 акад. ч.",
+                videos: [
+                    { name: "Част 1: Теория", src: "videos/lesson2_1.mp4" },
+                    { name: "Част 2: Практика", src: "videos/lesson2_2.mp4" }
+                ],
+                presentation: "presentations/lesson2.pdf",
+                points: [
+                    "Разбор на компонентите: Лента с менюта, Контекстна лента с опции и Панел с инструменти.",
+                    "Концепция за Работни среди и активиране на специализираната среда 'Graphics and Web'.",
+                    "Управление, докиране, отваряне и затваряне на функционални палитри през Window.",
+                    "Системна оптимизация на софтуера през Preferences (Ctrl + K) за разпределяне на RAM и GPU.",
+                    "Настройка на работни дискове (Scratch Disks) и промяна на отчетните линийки в пиксели."
+                ]
+            },
+            3: {
+                title: "Инструменти за рисуване и свободни трансформации",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson3.mp4",
+                presentation: "presentations/lesson3.pdf",
+                points: [
+                    "Работа с базовите инструменти за рисуване Brush Tool и Pencil Tool.",
+                    "Управление на параметрите на четката: размер, твърдост, непрозрачност и поток.",
+                    "Използване на бързи клавишни комбинации за диманичен контрол на четката върху платното.",
+                    "Концепция и приложение на инструмента Free Transform (Ctrl + T) за оразмеряване.",
+                    "Практически режими за мащабиране, завъртане и пластмасово огъване (Warp, Skew, Distort)."
+                ]
+            },
+            4: {
+                title: "Работа с инструменти за селекция и маркиране",
+                duration: "6 акад. ч.",
+                videos: "videos/lesson4.mp4",
+                presentation: "presentations/lesson4.pdf",
+                points: [
+                    "Значение на селекцията и геометрични инструменти (Rectangular/Elliptical Marquee).",
+                    "Работа с инструментите за свободна селекция: Lasso, Polygonal и Magnetic Lasso Tool.",
+                    "Автоматични методи за селекция по съседни пиксели: Magic Wand и Quick Selection.",
+                    "Практическо приложение на четирите режима за комбиниране на селекции.",
+                    "Техники за заглаждане на ръбовете (Anti-alias), инвертиране (Inverse) и размиване (Feather)."
+                ]
+            },
+            5: {
+                title: "Концепция и управление на слоевете (Layers)",
+                duration: "6 акад. ч.",
+                videos: "videos/lesson5.mp4",
+                presentation: "presentations/lesson5.pdf",
+                points: [
+                    "Същност на концепцията за слоеве в растерната графика и ролята им в дизайна.",
+                    "Анатомия на панела Layers: създаване, изтриване, дублиране, групиране и заключване.",
+                    "Управление на видимостта, наименуването и подредбата във вертикалната йерархия.",
+                    "Разлика между параметрите Opacity (Непрозрачност) и Fill (Запълване).",
+                    "Запознаване с основните режими на смесване (Blending Modes) за специфични ефекти.",
+                    "Прилагане на базови стилове на слоя — Drop Shadow, Stroke и Color Overlay."
+                ]
+            },
+            6: {
+                title: "Работа със слоеви маски и цветови канали",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson6.mp4",
+                presentation: "presentations/lesson6.pdf",
+                points: [
+                    "Концепция за неразрушителна обработка (Non-destructive editing) на изображения.",
+                    "Същност и създаване на слоева маска — логика на черния и белия цвят.",
+                    "Техники за прецизно изрязване и колажиране чрез редактиране на маски с четка.",
+                    "Запознаване с панела Channels и структурата на композитното RGB изображение.",
+                    "Използване на индивидуални цветови канали за генериране на висококонтрастни селекции."
+                ]
+            },
+            7: {
+                title: "Маркиране с пътеки (Paths) и инструмент Pen Tool",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson7.mp4",
+                presentation: "presentations/lesson7.pdf",
+                points: [
+                    "Математическа същност на векторните пътеки и кривите на Безие в растерна среда.",
+                    "Анатомия и режими на инструмента Pen Tool — работа в режим Path.",
+                    "Техники за поставяне на опорни точки, чертане на прави линии и плавни криви.",
+                    "Модифициране на съществуващи пътеки чрез Add/Delete Anchor и Convert Point Tool.",
+                    "Работа с панела Paths и преобразуване на векторна пътека в растерна селекция."
+                ]
+            },
+            8: {
+                title: "Използване на филтри и ефекти от Filter Gallery",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson8.mp4",
+                presentation: "presentations/lesson8.pdf",
+                points: [
+                    "Архитектура на менюто Filter и общи принципи на растерната филтрация.",
+                    "Работа с интерфейса на Filter Gallery — комбиниране и подредба на няколко ефекта.",
+                    "Ключови филтри за уеб подготовка: Gaussian Blur и Unsharp Mask.",
+                    "Концепция за интелигентни филтри чрез предварително конвертиране в Smart Object.",
+                    "Практическо приложение на филтъра Liquify за пластмасова ретуш на форми."
+                ]
+            },
+            9: {
+                title: "Корекция на експозицията, цветовете и локален ретуш",
+                duration: "6 акад. ч.",
+                videos: "videos/lesson9.mp4",
+                presentation: "presentations/lesson9.pdf",
+                points: [
+                    "Анализ на светлината и разпределението на тоновете чрез хистограма.",
+                    "Неразрушителна тонална корекция чрез коригиращи слоеве (Adjustment Layers).",
+                    "Работа с инструменти за светлина: Levels и Curves за баланс на контраста.",
+                    "Цветова корекция и управление на насищането: Hue/Saturation и Color Balance.",
+                    "Инструменти за ретуш: Spot Healing Brush, Healing Brush и Clone Stamp Tool.",
+                    "Използване на инструментите от групата Dodge (изсветляване) и Burn (потъмняване)."
+                ]
+            },
+            10: {
+                title: "Работа с текст и дизайн на рекламни уеб банери",
+                duration: "6 акад. ч.",
+                videos: "videos/lesson10.mp4",
+                presentation: "presentations/lesson10.pdf",
+                points: [
+                    "Специфика на дигиталната типография — векторни текстови слоеве в растерна среда.",
+                    "Работа с инструментите от групата Type Tool — Point Type и Paragraph Type.",
+                    "Управление на параметри през Character и Paragraph: големина, Кернинг, Тракинг, Интерлиняж.",
+                    "Деформиране на текстови контури (Warp Text) и поставяне на текст по векторна пътека.",
+                    "Композиционни правила при дизайн на банери: йерархия, CTA бутони, лога и продукти."
+                ]
+            },
+            11: {
+                title: "Основи на векторната графика в средата на Photoshop",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson11.mp4",
+                presentation: "presentations/lesson11.pdf",
+                points: [
+                    "Причини и предимства за използването на векторни обекти вътре в растерния софтуер.",
+                    "Разлика между режимите на Pen Tool: режим Path и режим Shape.",
+                    "Концепция за векторни маски (Vector Masks) и техните предимства пред растерните.",
+                    "Запознаване с функционалността на панела Properties при селектиран векторен обект."
+                ]
+            },
+            12: {
+                title: "Изчертаване и настройка на векторни форми",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson12.mp4",
+                presentation: "presentations/lesson12.pdf",
+                points: [
+                    "Работа с инструментите за геометрични фигури (Shape Tools).",
+                    "Използване на Custom Shape Tool за вграждане и модификация на готови икони.",
+                    "Конфигуриране на свойствата на формите: цвят на запълване (Fill) и контур (Stroke).",
+                    "Динамично заобляне на ъглите (Corner Radius) на правоъгълници за уеб бутони."
+                ]
+            },
+            13: {
+                title: "Редактиране, подравняване и експорт на обекти",
+                duration: "4 акад. ч.",
+                videos: "videos/lesson13.mp4",
+                presentation: "presentations/lesson13.pdf",
+                points: [
+                    "Работа с инструментите за директна селекция на точки: Path Selection и Direct Selection.",
+                    "Логически операции с векторни форми: комбиниране, изваждане, застъпване.",
+                    "Автоматично подравняване (Align) и равномерно разпределение (Distribute) на слоеве.",
+                    "Значение на интелигентните обекти (Smart Objects) за запазване на качеството.",
+                    "Техники за експорт: Quick Export as PNG и Export As (JPEG, PNG, SVG, WebP)."
+                ]
+            }
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 1;
+
+        if (currentId < 1) currentId = 1;
+        if (currentId > 13) currentId = 13;
+
+        function loadLesson(id) {
+            const lesson = lessonsData[id];
+            if (!lesson) return;
+
+            document.getElementById('lessonBadge').innerText = `Тема ${id} • ${lesson.duration}`;
+            document.getElementById('lessonTitle').innerText = lesson.title;
+            
+            document.getElementById('presEmbed').src = lesson.presentation;
+            document.getElementById('downloadPres').href = lesson.presentation;
+
+            const videoElement = document.getElementById('lessonVideo');
+            const videoSource = document.getElementById('videoSource');
+            const partsContainer = document.getElementById('videoPartsContainer');
+            
+            partsContainer.innerHTML = ''; 
+
+            if (Array.isArray(lesson.videos)) {
+                partsContainer.classList.remove('d-none');
+                lesson.videos.forEach((vid, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = `btn btn-outline-info ${index === 0 ? 'active' : ''}`;
+                    btn.innerText = vid.name;
+                    btn.addEventListener('click', () => {
+                        Array.from(partsContainer.children).forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        videoSource.src = vid.src;
+                        videoElement.load();
+                        videoElement.play();
+                    });
+                    partsContainer.appendChild(btn);
+                });
+                videoSource.src = lesson.videos[0].src;
+            } else {
+                partsContainer.classList.add('d-none');
+                videoSource.src = lesson.videos;
+            }
+            
+            videoElement.load();
+
+            const pointsContainer = document.getElementById('lessonPoints');
+            pointsContainer.innerHTML = '';
+            lesson.points.forEach(point => {
+                const li = document.createElement('li');
+                li.className = "list-group-item bg-transparent border-0 px-0 py-1 text-muted";
+                li.innerHTML = `• ${point}`;
+                pointsContainer.appendChild(li);
+            });
+
+            document.getElementById('prevBtn').disabled = (id === 1);
+            document.getElementById('nextBtn').disabled = (id === 13);
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentId > 1) window.location.href = `lesson-view.html?id=${currentId - 1}`;
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentId < 13) window.location.href = `lesson-view.html?id=${currentId + 1}`;
+        });
+
+        loadLesson(currentId);
+    </script>
+    <script src="components.js"></script>
+</body>
+</html>
